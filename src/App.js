@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Sampler } from "tone";
+import A1 from "./A1.mp3";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { isLoaded: false };
+    this.handleClick = this.handleClick.bind(this);
+
+    this.sampler = new Sampler(
+      { A1 },
+      {
+        onload: () => {
+          this.setState({ isLoaded: true });
+        }
+      }
+    ).toMaster();
+  }
+
+  handleClick() {
+    this.sampler.triggerAttack("A1");
+  }
+
+  handleClickB = () => {
+    this.sampler.triggerAttack("A1");
+  }
+
+  render() {
+    const { isLoaded } = this.state;
+    return (
+      <div>
+        <button disabled={!isLoaded} onClick={this.handleClick}>
+          start
+        </button>
+        <button disabled={!isLoaded} onClick={this.handleClickB}>
+          start2
+        </button>
+      </div>
+    );
+  }
 }
-
-export default App;
